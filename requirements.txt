@@ -3,3 +3,4 @@ matplotlib
 pillow
 pandas
 numpy
+streamlit-lottie
