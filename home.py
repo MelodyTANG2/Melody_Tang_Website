@@ -33,7 +33,8 @@ def home_page():
             """,
             unsafe_allow_html=True
         )
-        right_col.image(image, output_format='PNG', clamp=True, width=250)
+        right_col.image(image, output_format='PNG', clamp=True, width=250,
+            use_container_width=False)
     else:
         right_col.warning("Profile image not found")
 
