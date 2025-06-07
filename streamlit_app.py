@@ -1,6 +1,11 @@
 import warnings
 import streamlit as st
 import os
+import streamlit as st
+st.set_option('deprecation.showPyplotGlobalUse', False)
+st.set_option('deprecation.showfileUploaderEncoding', False)
+st.set_option('deprecation.showImageUseColumnWidth', False)
+
 warnings.simplefilter(action="ignore", category=FutureWarning)
 
 # Must be the first Streamlit command
