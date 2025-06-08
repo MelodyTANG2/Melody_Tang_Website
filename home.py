@@ -3,6 +3,7 @@ from PIL import Image #PIL for loading images
 import os
 import base64
 from io import BytesIO
+
 def image_to_base64(image):
     # 将RGBA转换为RGB模式
     if image.mode == 'RGBA':
@@ -24,10 +25,11 @@ def home_page():
         image = image.resize((300, 300))
         img_base64 = image_to_base64(image)
         
+        # 使用st.image替代markdown显示图片
         right_col.markdown(
-            f"""
+            """
             <style>
-            .profile-img {{
+            .profile-img {
                 width: 250px;
                 height: 250px;
                 border-radius: 50%;
@@ -36,15 +38,22 @@ def home_page():
                 display: block;
                 margin: auto;
                 transition: transform 0.3s ease;
-            }}
-            .profile-img:hover {{
+            }
+            .profile-img:hover {
                 transform: scale(1.05);
                 box-shadow: 0 12px 24px rgba(0,0,0,0.2);
-            }}
+            }
             </style>
-            <img src="data:image/jpeg;base64,{img_base64}" class="profile-img">
             """,
             unsafe_allow_html=True
+        )
+        
+        right_col.image(
+            image,
+            use_container_width=True,
+            output_format="JPEG",
+            clamp=True,
+            channels="RGB",
         )
     else:
         right_col.warning("Profile image not found")
