@@ -1,6 +1,16 @@
 import streamlit as st
 from PIL import Image #PIL for loading images
 import os
+import base64
+from io import BytesIO
+def image_to_base64(image):
+    # 将RGBA转换为RGB模式
+    if image.mode == 'RGBA':
+        image = image.convert('RGB')
+    buffered = BytesIO()
+    image.save(buffered, format="JPEG")
+    img_str = base64.b64encode(buffered.getvalue()).decode()
+    return img_str
 
 def home_page():
     # 创建优雅的两栏布局
@@ -12,10 +22,12 @@ def home_page():
         image = Image.open(image_path)
         # 调整图片大小为固定尺寸
         image = image.resize((300, 300))
+        img_base64 = image_to_base64(image)
+        
         right_col.markdown(
-            """
+            f"""
             <style>
-            img {
+            .profile-img {{
                 width: 250px;
                 height: 250px;
                 border-radius: 50%;
@@ -24,17 +36,16 @@ def home_page():
                 display: block;
                 margin: auto;
                 transition: transform 0.3s ease;
-            }
-            img:hover {
+            }}
+            .profile-img:hover {{
                 transform: scale(1.05);
                 box-shadow: 0 12px 24px rgba(0,0,0,0.2);
-            }
+            }}
             </style>
+            <img src="data:image/jpeg;base64,{img_base64}" class="profile-img">
             """,
             unsafe_allow_html=True
         )
-        right_col.image(image, output_format='PNG', clamp=True, width=250,
-            use_container_width=False)
     else:
         right_col.warning("Profile image not found")
 
@@ -56,7 +67,6 @@ def home_page():
             font-size: 1.1em;
             line-height: 1.8;
             padding: 15px;
-
         }
         .contact-info a {
             color: #3498DB;
