@@ -4,57 +4,15 @@ import os
 import base64
 from io import BytesIO
 
-def image_to_base64(image):
-    # 将RGBA转换为RGB模式
-    if image.mode == 'RGBA':
-        image = image.convert('RGB')
-    buffered = BytesIO()
-    image.save(buffered, format="JPEG")
-    img_str = base64.b64encode(buffered.getvalue()).decode()
-    return img_str
-
 def home_page():
     # 创建优雅的两栏布局
     left_col, right_col = st.columns([3, 2])
     
     # 添加个人照片，使用圆形裁剪效果
-    image_path = os.path.join("static", "images", "image_me.jpg") #这是照片的路径
+        image_path = os.path.join("static", "images", "image_me.jpg") #这是照片的路径
     if os.path.exists(image_path):
         image = Image.open(image_path)
-        # 调整图片大小为固定尺寸
-        image = image.resize((300, 300))
-        img_base64 = image_to_base64(image)
-        
-        # 使用st.image替代markdown显示图片
-        right_col.markdown(
-            """
-            <style>
-            .profile-img {
-                width: 250px;
-                height: 250px;
-                border-radius: 50%;
-                object-fit: cover;
-                box-shadow: 0 8px 16px rgba(0,0,0,0.15);
-                display: block;
-                margin: auto;
-                transition: transform 0.3s ease;
-            }
-            .profile-img:hover {
-                transform: scale(1.05);
-                box-shadow: 0 12px 24px rgba(0,0,0,0.2);
-            }
-            </style>
-            """,
-            unsafe_allow_html=True
-        )
-        
-        right_col.image(
-            image,
-            use_container_width=True,
-            output_format="JPEG",
-            clamp=True,
-            channels="RGB",
-        )
+        right_col.image(image, width=200)
     else:
         right_col.warning("Profile image not found")
 
